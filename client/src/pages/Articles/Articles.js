@@ -16,6 +16,10 @@ class Articles extends Component {
     savedArticles: []
   }
 
+  componentDidMount() {
+    this.getSavedArticles();
+  }
+
   handleInputChange = event => {
     let { name, value } = event.target;
     this.setState({ [name]: value });
@@ -33,7 +37,6 @@ class Articles extends Component {
           startDate: "",
           endDate: ""
         });
-        console.log(this.state.articles);
       })
       .catch(err => console.log(err))
   }
@@ -47,19 +50,20 @@ class Articles extends Component {
       byline: currentArticle.byline.original
     }
 
-    console.log(newSavedArticle);
-
     API.saveArticle(newSavedArticle)
-      .then(res => this.getSavedArticles)
+      .then(res => this.getSavedArticles())
       .catch(err => console.log(err))
   }
 
   getSavedArticles = () => {
     API.getSavedArticles()
-      .then(res => {
-        let newSavedArr = [...this.state.savedArticles, res.data];
-        this.setState({ savedArticles: newSavedArr })
-      })
+      .then(res => { this.setState({ savedArticles: res.data }) })
+      .catch(err => console.log(err))
+  }
+
+  deleteArticle = event => {
+    API.deleteArticle(event.target.id)
+      .then(res => this.getSavedArticles())
       .catch(err => console.log(err))
   }
 
@@ -93,14 +97,15 @@ class Articles extends Component {
                   </ListItem>
                 ))}
               </List>
-            ) : ( <p>"No articles yet."</p> )}
+            ) : ( <p>"Nothing to see here. Move along."</p> )}
           </Card>
           <Card cardTitle="Saved Articles">
             {this.state.savedArticles.length ? (
               <List>
                 {this.state.savedArticles.map((article, index) => (
                   <ListItem key={index}>
-                    {article.headline.main}
+                    {article.headline}
+                    <DeleteBtn onClick={this.deleteArticle} id={article._id} />
                   </ListItem>
                 ))}
               </List>

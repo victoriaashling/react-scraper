@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const articleSchema = new Schema({
-  headline: { type: STRING, required: true },
-  url: { type: STRING, required: true },
-  byline: STRING
+  headline: { type: String, required: true },
+  url: { type: String, required: true },
+  byline: String
 });
 
 const Article = mongoose.model("Article", articleSchema);
