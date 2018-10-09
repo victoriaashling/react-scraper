@@ -57,7 +57,10 @@ class Articles extends Component {
 
   getSavedArticles = () => {
     API.getSavedArticles()
-      .then(res => { this.setState({ savedArticles: res.data }) })
+      .then(res => { 
+        console.log(res.data)
+        this.setState({ savedArticles: res.data }) 
+      })
       .catch(err => console.log(err))
   }
 
@@ -92,24 +95,24 @@ class Articles extends Component {
               <List>
                 {this.state.articles.map((article, index) => (
                   <ListItem key={index}>
-                    {article.headline.main}
+                    <a href={article.web_url} target="_blank" >{article.headline.main}</a>
                     <SaveBtn id={index} onClick={this.handleSave} />
                   </ListItem>
                 ))}
               </List>
-            ) : ( <p>"Nothing to see here. Move along."</p> )}
+            ) : ( <p>Nothing to see here. Move along.</p> )}
           </Card>
           <Card cardTitle="Saved Articles">
             {this.state.savedArticles.length ? (
               <List>
                 {this.state.savedArticles.map((article, index) => (
                   <ListItem key={index}>
-                    {article.headline}
+                    <a href={article.url} target="_blank" >{article.headline}</a>
                     <DeleteBtn onClick={this.deleteArticle} id={article._id} />
                   </ListItem>
                 ))}
               </List>
-            ) : ( <p>"No saved articles yet."</p> )}
+            ) : ( <p>No saved articles yet.</p> )}
           </Card>
         </Container>
       </div>
